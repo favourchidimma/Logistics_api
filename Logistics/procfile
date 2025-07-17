@@ -1,2 +1,2 @@
-web:gunicorn.logistics.wsgi
+web:gunicorn.Logistics.wsgi
 release:python manage.py migrate
