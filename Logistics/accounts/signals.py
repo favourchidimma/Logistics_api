@@ -30,7 +30,7 @@ def send_welcome_mail(sender, instance,created,**kwargs):
             otp = generate_otp()
             print(otp)
 
-            expiry_date = timezone.now() + timezone.timedelta(minutes=2)
+            expiry_date = timezone.now() + timezone.timedelta(minutes=1)
 
             OTP.objects.create(
                 otp = otp,
@@ -61,6 +61,7 @@ def send_welcome_mail(sender, instance,created,**kwargs):
         )
 
         print(response.json())
+
 
 
 

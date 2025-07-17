@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .models import *
 from .serializers import *
 import uuid
@@ -192,7 +192,7 @@ class InventoryUpdateView(APIView):
 
 class InventoryByWarehouseView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminUser]
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -206,8 +206,6 @@ class InventoryByWarehouseView(APIView):
             return Response({"error": "warehouse_id is required"}, status=status.HTTP_400_BAD_REQUEST)
         inventories = Inventory.objects.filter(warehouse_id=warehouse_id)
         return Response(InventorySerializer(inventories, many=True).data, status=status.HTTP_200_OK)
-
-
 
 class ShipmentGenericView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -315,7 +313,7 @@ class PricingView(APIView):
     
 class OptimizeRoutesView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminUser]
 
     @swagger_auto_schema(
         operation_description="Optimize delivery routes",
@@ -396,7 +394,7 @@ class DriverDetailView(APIView):
         return Response(serializer.data)
 class AssignDriverView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminUser]
 
     @swagger_auto_schema(
         operation_description="Assign a driver to a shipment",
@@ -406,6 +404,7 @@ class AssignDriverView(APIView):
             properties={
                 "shipment_id": openapi.Schema(type=openapi.TYPE_INTEGER),
                 "driver_id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                "delivery_window": openapi.Schema(type=openapi.TYPE_STRING)
             }
         )
     )
@@ -419,7 +418,6 @@ class AssignDriverView(APIView):
         except Shipment.DoesNotExist:
             return Response({"error": "Shipment not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Assume you have a Driver model
         try:
             driver = Driver.objects.get(id=driver_id)
         except Driver.DoesNotExist:
@@ -437,5 +435,3 @@ class AssignDriverView(APIView):
                 "start_time": delivery_window
             }
         }, status=status.HTTP_200_OK)
-
-

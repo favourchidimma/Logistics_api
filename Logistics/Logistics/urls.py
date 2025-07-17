@@ -24,9 +24,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Blog API",
+      title="Logistics API",
       default_version='v1',
-      description="This is my blog API doc",
+      description="This is my Logistics API doc",
       terms_of_service="",
       contact=openapi.Contact(email="contact@favour.local"),
       license=openapi.License(name="BSD License"),
