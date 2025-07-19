@@ -34,7 +34,6 @@ class Shipment(models.Model):
     estimated_delivery_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-
     driver = models.ForeignKey('Driver', on_delete=models.SET_NULL, null=True, blank=True)
     sender_phone = models.CharField(max_length=15, null=True, blank=True)
     delivery_window = models.CharField(max_length=100, null=True, blank=True)
