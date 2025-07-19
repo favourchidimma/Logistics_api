@@ -1,1 +1,1 @@
-web: gunicorn logistics.wsgi
+web: gunicorn logistics.wsgi --pythonpath=.
